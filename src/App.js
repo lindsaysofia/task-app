@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import Overview from './components/Overview';
+import uniqid from 'uniqid';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: '',
+      task: {
+        text: '',
+        id: uniqid()
+      },
       tasks: []
     }
   }
 
   handleChange = (e) => {
-    this.setState({
-      input: e.target.value
+    this.setState((prevState) => {
+      return {
+        task: {
+          text: e.target.value,
+          id: prevState.task.id
+        }
+      };
     });
   };
 
@@ -20,8 +29,11 @@ class App extends Component {
     e.preventDefault();
     this.setState((prevState) => {
       return {
-        input: '',
-        tasks: prevState.tasks.concat(prevState.input)
+        tasks: prevState.tasks.concat(prevState.task),
+        task: {
+          text:'',
+          id: uniqid()
+        },
       };
     });
   };
@@ -32,14 +44,12 @@ class App extends Component {
         <form onSubmit={this.handleSubmit}>
           <input 
             type="text"
-            value={this.state.input}
+            value={this.state.task.text}
             onChange={this.handleChange}
           />
-          <button>Submit</button>
+          <button type="submit">Submit</button>
         </form>
-        <ul>
-          {this.state.tasks.map((task, index) => <Overview task={task} key={index} />)}
-        </ul>
+        <Overview tasks={this.state.tasks}/>
       </div>
     );
   }

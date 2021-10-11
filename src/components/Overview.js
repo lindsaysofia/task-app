@@ -1,7 +1,10 @@
 function Overview(props) {
-  const { task, index } = props;
+  const { tasks } = props;
   return (
-    <li key={index}>{task}</li>
+    <ul>
+      {tasks.map((task) => <li key={task.id}>{task.text}</li>)}
+    </ul>
+    
   );
 }
 
